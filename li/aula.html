@@ -1,45 +1,76 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
- <meta charset="UTF-8">
- <meta name="viewport" content="width=device-width, initial-scale=1.0">
- <title>Sobre Mim </title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Tarefas</title>
 </head>
 <body>
+    <h1>Minha Lista de Tarefas</h1>
+    <input id="filtro" placeholder="Filtrar tarefa">
+    <input id="tarefa" placeholder="Digite uma tarefa">
+    <button onclick="addTarefa()">Adicionar</button>
+    <button onclick="limparTarefas()">Remover tudo</button>
+    <ul id="lista"></ul>
 
- <h1>Livia Neves de Oliveira</h1>
- <P>Olá! Meu nome é Lívia,tenho  16 anos sou apaixonada por tecnologia.<br>
-   Atualmente, estou cursando Análise e Desenvolvimento de Sistemas, onde desenvolvo habilidades em programação e resolução de problemas. 
+    <script>
+        function carregarTarefas() {
+            const tarefasSalvas = localStorage.getItem("tarefas");
+            if (tarefasSalvas) {
+                const tarefas = JSON.parse(tarefasSalvas);
+                tarefas.forEach(t => criarElementoTarefa(t));
+            }
+        }
 
+        function salvarTarefas() {
+            const lista = document.querySelectorAll("#lista li");
+            const tarefas = Array.from(lista).map(li => li.textContent);
+            localStorage.setItem("tarefas", JSON.stringify(tarefas));
+        }
 
+        function criarElementoTarefa(texto) {
+            let li = document.createElement("li");
+            li.textContent = texto;
+            li.onclick = () => {
+                li.remove();
+                salvarTarefas(); // salva após remoção
+            };
+            document.getElementById('lista').appendChild(li);
+        }
 
+        function addTarefa() {
+            let input = document.getElementById("tarefa");
+            if (input.value.trim() === "") return;
 
+            criarElementoTarefa(input.value.trim());
+            salvarTarefas();
+            input.value = "";
+        }
 
-.</P>
- <!-- PARA FAZER COMENTARIO -->
+        function limparTarefas() {
+            const lista = document.getElementById("lista");
+            lista.innerHTML = "";
+            localStorage.removeItem("tarefas");
+        }
 
- <img src="Coraline_Jones.webp" width= "150" height="200" > 
-  <!-- imagem -->  
+        document.getElementById("tarefa").addEventListener("keypress", function(e) {
+    if (e.key === "Enter") {
+        addTarefa();
+    }
+});
+function filtrarTarefas() {
+    const filtro = document.getElementById("filtro").value.toLowerCase();
+    const itens = document.querySelectorAll("#lista li");
 
-   
- <h2> MEUS HOBBIES </h2> </h2>
- <ol>   <!-- Lista ordenada -->
-  <li>Pintar unha</li>
-  <li>Estudar</li>
-  <li>Ouvir música</li>
-  
-<a href="http://lojasrede.com" target="_blank"> Ir para o site que eu gosto </a>
+    itens.forEach(item => {
+        const texto = item.textContent.toLowerCase();
+        item.style.display = texto.includes(filtro) ? "list-item" : "none";
+    });
+}
 
-  <!--
- <h3>Desenhos Favoritos</h3>
- <ul> 
- <li>Clarencio Otimista</li>
- <li> Hora de Aventura</li>
- <li> Dan Dan </li>
- <li> Steven Universo</li>-->
- 
+document.getElementById("filtro").addEventListener("input", filtrarTarefas);
 
-
-
+        window.onload = carregarTarefas;
+    </script>
 </body>
 </html>
