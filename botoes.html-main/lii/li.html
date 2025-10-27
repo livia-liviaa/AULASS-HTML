@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>botoes</title>
+</head>
+<body>
+    <div>
+    <button class="botoes">botao 1</button>
+    <button class="botoes">botão 2</button>
+    <button class="botoes">botão 3</button>
+    </div>
+
+   <script>
+   const botoes = document.querySelectorAll(".botoes");
+    botoes.forEach(function(botao){
+    botao.addEventListener("click",function(){
+    alert("Você acabou de clicar no "+botao.innerText );
+     });
+   });
+
+   </script>
+    
+    
+</body>
+</html>
